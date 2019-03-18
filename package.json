@@ -1,0 +1,96 @@
+{
+  "name": "get-sub-directories",
+  "version": "0.0.1",
+  "description": "returns an array of sub directory path strings",
+  "keywords": [
+    "filesystem"
+  ],
+  "homepage": "https://github.com/nickmeldrum/get-sub-directories-node",
+  "author": "Nick Meldrum <nick@nickmeldrum.com> (http://nickmeldrum.com/)",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/nickmeldrum/get-sub-directories-node/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/nickmeldrum/get-sub-directories-node"
+  },
+  "engines": {
+    "node": ">=7.10.1"
+  },
+  "main": "src/index.js",
+  "scripts": {
+    "start": "node src/index.js",
+    "lint": "eslint src --fix",
+    "test": "yarn lint && jest --coverage",
+    "test-changed": "lint-staged && jest -o",
+    "watch": "jest --watch --notify"
+  },
+  "jest": {
+    "collectCoverageFrom": [
+      "src/**/*.js"
+    ],
+    "coverageDirectory": "coverage"
+  },
+  "eslintConfig": {
+    "extends": [
+      "airbnb-base",
+      "plugin:prettier/recommended"
+    ],
+    "env": {
+      "node": true,
+      "es6": true,
+      "jest": true
+    },
+    "rules": {
+      "import/no-extraneous-dependencies": 0
+    },
+    "settings": {
+      "import/resolver": {
+        "node": {
+          "extensions": [
+            ".js"
+          ],
+          "paths": [
+            "."
+          ]
+        }
+      }
+    }
+  },
+  "prettier": {
+    "semi": false,
+    "useTabs": false,
+    "tabWidth": 2,
+    "singleQuote": true,
+    "arrowParens": "avoid",
+    "trailingComma": "all",
+    "parser": "babel",
+    "printWidth": 100
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "yarn test-changed"
+    }
+  },
+  "lint-staged": {
+    "*.js": [
+      "eslint --fix",
+      "git add"
+    ]
+  },
+  "devDependencies": {
+    "eslint": "^5.15.1",
+    "eslint-config-airbnb-base": "^13.1.0",
+    "eslint-config-prettier": "^4.1.0",
+    "eslint-plugin-import": "^2.16.0",
+    "eslint-plugin-prettier": "^3.0.1",
+    "husky": "^1.3.1",
+    "jest": "^24.1.0",
+    "lint-staged": "^8.1.5",
+    "prettier": "^1.16.4"
+  },
+  "dependencies": {
+    "fs-extra": "^7.0.1"
+  }
+}
