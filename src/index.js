@@ -1,6 +1,7 @@
 const fs = require('fs')
 const util = require('util')
 const path = require('path')
+const flatten = require('array-flatten')
 
 function MoreArgumentsNeededError(numberRequired) {
   this.name = 'MoreArgumentsNeededError'
@@ -32,7 +33,7 @@ const validateArgs = (directory, options) => {
     )
 }
 
-module.exports = async (directory, options = {}) => {
+const getSubdirectories = async (directory, options = {}) => {
   validateArgs(directory, options)
 
   const readdir = util.promisify(fs.readdir)
@@ -40,11 +41,27 @@ module.exports = async (directory, options = {}) => {
   const byFilter =
     options.filter === undefined ? () => true : source => new RegExp(options.filter).test(source)
   const convertToFullDir = folder => path.join(directory, folder)
-  const contents = await readdir(directory)
-  return contents
+  const levelContentNames = await readdir(directory)
+  const filteredLevelContentFullPaths = levelContentNames
     .filter(byFilter)
     .map(convertToFullDir)
     .filter(isDirectory)
+
+  if (options.levels !== undefined || options.recursive === true) {
+    return filteredLevelContentFullPaths.concat(
+      flatten(
+        await Promise.all(
+          filteredLevelContentFullPaths.map(async parentPath =>
+            getSubdirectories(parentPath, options),
+          ),
+        ),
+      ),
+    )
+  }
+
+  return filteredLevelContentFullPaths
 }
+
+module.exports = getSubdirectories
 
 module.exports.MoreArgumentsNeededError = MoreArgumentsNeededError

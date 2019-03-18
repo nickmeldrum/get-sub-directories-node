@@ -91,6 +91,7 @@
     "prettier": "^1.16.4"
   },
   "dependencies": {
+    "array-flatten": "^2.1.2",
     "fs-extra": "^7.0.1"
   }
 }
