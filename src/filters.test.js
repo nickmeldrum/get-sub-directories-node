@@ -1,17 +1,17 @@
 const fs = require('fs-extra')
 const path = require('path')
 const getSubdirectories = require('../')
-
-const testPath = path.join(__dirname, '../tmp')
-
-const randomString = () =>
-  Math.random()
-    .toString(36)
-    .substring(7)
+const { randomString, prepareTestDirectory, cleanTestDirectory } = require('./test.helpers')
 
 describe('filters', () => {
-  beforeEach(async () => fs.emptyDir(testPath))
-  afterEach(async () => fs.emptyDir(testPath))
+  let testPath
+
+  beforeEach(async () => {
+    testPath = await prepareTestDirectory()
+  })
+  afterEach(async () => {
+    await cleanTestDirectory(testPath)
+  })
 
   test('when filter applied, only returns the 1 subdirectory that matches the filter', async () => {
     await fs.ensureDir(path.join(testPath, `foo${randomString()}`))

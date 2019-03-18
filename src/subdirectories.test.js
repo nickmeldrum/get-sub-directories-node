@@ -1,17 +1,17 @@
 const fs = require('fs-extra')
 const path = require('path')
 const getSubdirectories = require('../')
-
-const testPath = path.join(__dirname, '../tmp')
-
-const randomString = () =>
-  Math.random()
-    .toString(36)
-    .substring(7)
+const { randomString, prepareTestDirectory, cleanTestDirectory } = require('./test.helpers')
 
 describe('subdirectories', () => {
-  beforeEach(async () => fs.emptyDir(testPath))
-  afterEach(async () => fs.emptyDir(testPath))
+  let testPath
+
+  beforeEach(async () => {
+    testPath = await prepareTestDirectory()
+  })
+  afterEach(async () => {
+    await cleanTestDirectory(testPath)
+  })
 
   test('returns an array', async () => {
     expect(await getSubdirectories(testPath)).toEqual([])
