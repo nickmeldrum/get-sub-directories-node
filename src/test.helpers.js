@@ -12,6 +12,6 @@ module.exports.prepareTestDirectory = async () => {
   return testPath
 }
 
-module.exports.cleanTestDirectory = async testPath => fs.emptyDir(testPath)
+module.exports.cleanTestDirectory = async testPath => fs.remove(testPath)
 
 module.exports.randomString = randomString
