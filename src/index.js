@@ -37,9 +37,16 @@ module.exports = async (directory, options = {}) => {
 
   const readdir = util.promisify(fs.readdir)
   const isDirectory = source => fs.lstatSync(source).isDirectory()
+  const byFilter =
+    options.filter === undefined
+      ? () => true
+      : source => new RegExp(options.filter, 'g').test(source)
   const convertToFullDir = folder => path.join(directory, folder)
   const contents = await readdir(directory)
-  return contents.map(convertToFullDir).filter(isDirectory)
+  return contents
+    .filter(byFilter)
+    .map(convertToFullDir)
+    .filter(isDirectory)
 }
 
 module.exports.MoreArgumentsNeededError = MoreArgumentsNeededError
