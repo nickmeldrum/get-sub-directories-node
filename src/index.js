@@ -5,7 +5,7 @@ const path = require('path')
 function MoreArgumentsNeededError(numberRequired) {
   this.name = 'MoreArgumentsNeededError'
   this.message = `More arguments needed. Required: (${numberRequired})`
-  this.stack = new TypeError().stack
+  Error.captureStackTrace(this, MoreArgumentsNeededError)
 }
 MoreArgumentsNeededError.prototype = new TypeError()
 
