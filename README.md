@@ -84,13 +84,29 @@ If the path passed in is not found, the `System Error`: `ENOENT: no such file or
 
 ### Invalid Arguments
 
-If both `levels` and `recursive` are specified in the options, a `RangeError` error is thrown:
+If arguments supplied are of the wrong type, then a `TypeError` is thrown:
 
-TODO: more details here!
+```
+    { Error: TypeError: ...
+      stack: ...
+    }
+```
+
+If both `levels` and `recursive` are specified in the options, then a `RangeError` is thrown:
+
+```
+    { Error: RangeError: please specify one of: levels | recursive. We cannot correctly interpret your wishes when both are specified,
+      stack: ...
+    }
+```
 
 If you specify zero, a negative number or a floating point number as a level, then a `RangeError` is thrown:
 
-TODO: mode details here!
+```
+    { Error: RangeError: levels must be a non-negative non-zero integer,
+      stack: ...
+    }
+```
 
 ## Examples
 
@@ -145,7 +161,7 @@ getSubdirectories('.', { levels: 'something' }).then(list => console.log(list))
 getSubdirectories('.', { recursive: 'do it please' }).then(list => console.log(list))
 ```
 
-This will throw a `More Arguments Needed TypeError`:
+This will throw a `More arguments needed Error`:
 
 ```
 getSubdirectories().then(list => console.log(list))
