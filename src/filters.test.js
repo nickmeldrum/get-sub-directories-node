@@ -9,7 +9,7 @@ const randomString = () =>
     .toString(36)
     .substring(7)
 
-describe('getSubDirectories', () => {
+describe('filters', () => {
   beforeEach(async () => fs.emptyDir(testPath))
   afterEach(async () => fs.emptyDir(testPath))
 

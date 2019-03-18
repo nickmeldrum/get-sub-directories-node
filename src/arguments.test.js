@@ -2,7 +2,7 @@ const getSubdirectories = require('../')
 
 const { MoreArgumentsNeededError } = getSubdirectories
 
-describe('getSubDirectories', () => {
+describe('arguments', () => {
   test('no arguments throws more arguments needed', async () => {
     expect.assertions(1)
     await expect(getSubdirectories()).rejects.toThrow(MoreArgumentsNeededError)
