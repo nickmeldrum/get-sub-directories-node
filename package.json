@@ -1,19 +1,19 @@
 {
-  "name": "get-sub-directories",
+  "name": "list-subdirectories",
   "version": "0.0.1",
-  "description": "returns an array of sub directory path strings",
+  "description": "returns an array of subdirectory path strings",
   "keywords": [
     "filesystem"
   ],
-  "homepage": "https://github.com/nickmeldrum/get-sub-directories-node",
+  "homepage": "https://github.com/nickmeldrum/list-subdirectories-node",
   "author": "Nick Meldrum <nick@nickmeldrum.com> (http://nickmeldrum.com/)",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/nickmeldrum/get-sub-directories-node/issues"
+    "url": "https://github.com/nickmeldrum/list-subdirectories-node/issues"
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/nickmeldrum/get-sub-directories-node"
+    "url": "https://github.com/nickmeldrum/list-subdirectories-node"
   },
   "engines": {
     "node": ">=7.10.1"

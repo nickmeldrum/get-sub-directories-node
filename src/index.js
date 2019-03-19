@@ -33,7 +33,7 @@ const validateArgs = (directory, options) => {
     )
 }
 
-const getSubdirectories = async (directory, options = {}, currentLevel = 0) => {
+const listSubdirectories = async (directory, options = {}, currentLevel = 0) => {
   validateArgs(directory, options)
 
   const readdir = util.promisify(fs.readdir)
@@ -55,7 +55,7 @@ const getSubdirectories = async (directory, options = {}, currentLevel = 0) => {
       flatten(
         await Promise.all(
           filteredLevelContentFullPaths.map(async parentPath =>
-            getSubdirectories(parentPath, options, currentLevel + 1),
+            listSubdirectories(parentPath, options, currentLevel + 1),
           ),
         ),
       ),
@@ -65,6 +65,6 @@ const getSubdirectories = async (directory, options = {}, currentLevel = 0) => {
   return filteredLevelContentFullPaths
 }
 
-module.exports = getSubdirectories
+module.exports = listSubdirectories
 
 module.exports.MoreArgumentsNeededError = MoreArgumentsNeededError

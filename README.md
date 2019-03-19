@@ -1,28 +1,28 @@
-# get-sub-directories-node
+# list-subdirectories-node
 
-A simple function that allows you to pass in a path to a directory and it will return a string array of sub directories.
+A simple function that allows you to pass in a path to a directory and it will return a string array of subdirectories.
 
 ## Installation
 
-`yarn install get-sub-directories`
+`yarn install list-subdirectories`
 
 or
 
-`npm install get-sub-directories`
+`npm install list-subdirectories`
 
 ## Basic usage example
 
-The following code will log out a string array of sub directories for the current directory:
+The following code will log out a string array of subdirectories for the current directory:
 
 ```
-const getSubdirectories = require('get-sub-directories')
+const listSubdirectories = require('list-subdirectories')
 
-getSubdirectories('.').then(list => console.log(list))
+listSubdirectories('.').then(list => console.log(list))
 ```
 
 ## API
 
-### getSubDirectories method
+### listSubdirectories method
 
 This is the only method available in the library. It is the default export (there are no named exports.)
 
@@ -30,7 +30,7 @@ It accepts 2 parameters:
 
 #### path: string (required)
 
-A string value of an absolute path to search for sub directories within.
+A string value of an absolute path to search for subdirectories within.
 
 #### options: object (optional)
 
@@ -112,34 +112,34 @@ If you specify zero, a negative number or a floating point number as a level, th
 
 ### Using the defaults:
 
-This will return a list of sub directories (non-recursive) of the current directory:
+This will return a list of subdirectories (non-recursive) of the current directory:
 
 ```
-getSubdirectories('.').then(list => console.log(list))
+listSubdirectories('.').then(list => console.log(list))
 ```
 
 ### Using a filter:
 
-This will return a list of sub directories (non-recursive) of the current directory that start with the string `foo`:
+This will return a list of subdirectories (non-recursive) of the current directory that start with the string `foo`:
 
 ```
-getSubdirectories('.', { filter: '^foo.*' }).then(list => console.log(list))
+listSubdirectories('.', { filter: '^foo.*' }).then(list => console.log(list))
 ```
 
 ### Searching recursively:
 
-This will return a list of all sub directories recursively (no depth limit):
+This will return a list of all subdirectories recursively (no depth limit):
 
 ```
-getSubdirectories('.', { recursive: true }).then(list => console.log(list))
+listSubdirectories('.', { recursive: true }).then(list => console.log(list))
 ```
 
 ### Using levels:
 
-This will return a list of all sub directories recursively to a limit of 2 (i.e. sub directories and THEIR sub directories, but no deeper):
+This will return a list of all subdirectories recursively to a limit of 2 (i.e. subdirectories and THEIR subdirectories, but no deeper):
 
 ```
-getSubdirectories('.', { levels: 2 }).then(list => console.log(list))
+listSubdirectories('.', { levels: 2 }).then(list => console.log(list))
 ```
 
 ### Invalid options:
@@ -147,24 +147,24 @@ getSubdirectories('.', { levels: 2 }).then(list => console.log(list))
 All of the following will throw a `RangeError`:
 
 ```
-getSubdirectories('.', { levels: 2, recursive: true }).then(list => console.log(list))
-getSubdirectories('.', { levels: -1.5 }).then(list => console.log(list))
+listSubdirectories('.', { levels: 2, recursive: true }).then(list => console.log(list))
+listSubdirectories('.', { levels: -1.5 }).then(list => console.log(list))
 ```
 
 All of the following will throw a `TypeError`:
 
 ```
-getSubdirectories(0).then(list => console.log(list))
-getSubdirectories('.', '').then(list => console.log(list))
-getSubdirectories('.', { filter: true }).then(list => console.log(list))
-getSubdirectories('.', { levels: 'something' }).then(list => console.log(list))
-getSubdirectories('.', { recursive: 'do it please' }).then(list => console.log(list))
+listSubdirectories(0).then(list => console.log(list))
+listSubdirectories('.', '').then(list => console.log(list))
+listSubdirectories('.', { filter: true }).then(list => console.log(list))
+listSubdirectories('.', { levels: 'something' }).then(list => console.log(list))
+listSubdirectories('.', { recursive: 'do it please' }).then(list => console.log(list))
 ```
 
 This will throw a `More arguments needed Error`:
 
 ```
-getSubdirectories().then(list => console.log(list))
+listSubdirectories().then(list => console.log(list))
 ```
 
 ## License
@@ -174,7 +174,7 @@ getSubdirectories().then(list => console.log(list))
 
 ## Contributing
 
-Feel free to [open issues](https://github.com/nickmeldrum/get-sub-directories-node/issues) or even better [submit pull requests](https://github.com/nickmeldrum/get-sub-directories-node/pulls).
+Feel free to [open issues](https://github.com/nickmeldrum/list-subdirectories-node/issues) or even better [submit pull requests](https://github.com/nickmeldrum/list-subdirectories-node/pulls).
 
 ### Guidelines for contributing (good pull requests):
 
