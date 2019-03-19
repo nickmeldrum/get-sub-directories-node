@@ -59,7 +59,7 @@ describe('recursive', () => {
     await fs.ensureDir(path.join(testPath, level1, level2))
     await fs.ensureDir(path.join(testPath, level1, anotherLevel2))
 
-    expect((await getSubdirectories(testPath, { levels: 1 })).length).toEqual(4)
+    expect((await getSubdirectories(testPath, { levels: 2 })).length).toEqual(4)
   })
 
   test('when level set to 3, and only 3 levels of directories will return them all', async () => {
@@ -78,6 +78,35 @@ describe('recursive', () => {
     await fs.ensureDir(path.join(testPath, level1, level2, randomString()))
     await fs.ensureDir(path.join(testPath, level1, anotherLevel2, randomString()))
 
-    expect((await getSubdirectories(testPath, { levels: 1 })).length).toEqual(6)
+    expect((await getSubdirectories(testPath, { levels: 3 })).length).toEqual(6)
+  })
+
+  test('when level set to 1, and 2 levels of directories will only return level 1', async () => {
+    const level1 = randomString()
+
+    await fs.ensureDir(path.join(testPath, level1))
+
+    await fs.ensureDir(path.join(testPath, level1, randomString()))
+
+    expect((await getSubdirectories(testPath, { levels: 1 })).length).toEqual(1)
+  })
+
+  test('when level set to 2, and 4 levels of directories will only return level 1 and 2', async () => {
+    const level1 = randomString()
+    const anotherLevel1 = randomString()
+
+    const level2 = randomString()
+    const anotherLevel2 = randomString()
+
+    const level3 = randomString()
+    const anotherLevel3 = randomString()
+
+    await fs.ensureDir(path.join(testPath, level1))
+    await fs.ensureDir(path.join(testPath, anotherLevel1))
+
+    await fs.ensureDir(path.join(testPath, level1, level2, level3, randomString()))
+    await fs.ensureDir(path.join(testPath, level1, anotherLevel2, anotherLevel3, randomString()))
+
+    expect((await getSubdirectories(testPath, { levels: 2 })).length).toEqual(4)
   })
 })

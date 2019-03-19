@@ -33,7 +33,7 @@ const validateArgs = (directory, options) => {
     )
 }
 
-const getSubdirectories = async (directory, options = {}) => {
+const getSubdirectories = async (directory, options = {}, currentLevel = 0) => {
   validateArgs(directory, options)
 
   const readdir = util.promisify(fs.readdir)
@@ -47,12 +47,15 @@ const getSubdirectories = async (directory, options = {}) => {
     .map(convertToFullDir)
     .filter(isDirectory)
 
-  if (options.levels !== undefined || options.recursive === true) {
+  if (
+    (options.levels !== undefined && currentLevel < options.levels - 1) ||
+    options.recursive === true
+  ) {
     return filteredLevelContentFullPaths.concat(
       flatten(
         await Promise.all(
           filteredLevelContentFullPaths.map(async parentPath =>
-            getSubdirectories(parentPath, options),
+            getSubdirectories(parentPath, options, currentLevel + 1),
           ),
         ),
       ),
