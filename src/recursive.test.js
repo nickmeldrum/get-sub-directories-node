@@ -119,4 +119,21 @@ describe('recursive', () => {
       (await listSubdirectories({ path: testPath, maxDepth: 2, recursive: true })).length,
     ).toEqual(4)
   })
+
+  test('filter is applied to all levels when scanning recursively', async () => {
+    await fs.ensureDir(path.join(testPath, 'foo-dir-level1'))
+    await fs.ensureDir(path.join(testPath, 'bar-dir-level1'))
+
+    await fs.ensureDir(path.join(testPath, 'foo-dir-level1', 'foo-dir-level2'))
+    await fs.ensureDir(path.join(testPath, 'foo-dir-level1', 'bar-dir-level2'))
+
+    await fs.ensureDir(path.join(testPath, 'foo-dir-level1', 'bar-dir-level2', randomString()))
+
+    await fs.ensureDir(path.join(testPath, 'bar-dir-level1', 'foo-dir-level2'))
+    await fs.ensureDir(path.join(testPath, 'bar-dir-level1', randomString()))
+
+    expect(
+      (await listSubdirectories({ path: testPath, filter: '^foo.*', recursive: true })).length,
+    ).toEqual(2)
+  })
 })

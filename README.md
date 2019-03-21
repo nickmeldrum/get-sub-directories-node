@@ -84,6 +84,7 @@ More details on the possible options:
  * An optional regular expression string that will be used to match against the subdirectory name. (Note 'name' NOT full path.)
  * If not included, then the method will return ALL subdirectories.
  * If included, then the method will return only matched subdirectories.
+ * If scanning recursively, the filter will be applied at all levels. i.e. it will only recurse into directories that match the filter as well as returning only directories that match the filter.
 
 ##### recursive: boolean (optional)
 
