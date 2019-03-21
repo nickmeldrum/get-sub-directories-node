@@ -27,18 +27,19 @@ const validateArgs = options => {
     throw new RangeError('options must contain a path string')
   if (options.filter !== undefined && typeof options.filter !== 'string')
     throw new TypeError('filter must be a string')
-  if (options.levels !== undefined && typeof options.levels !== 'number')
-    throw new TypeError('levels must be a number')
+  if (options.maxDepth !== undefined && typeof options.maxDepth !== 'number')
+    throw new TypeError('maxDepth must be a number')
   if (options.recursive !== undefined && typeof options.recursive !== 'boolean')
     throw new TypeError('recursive must be a boolean')
 
   // arguments are in the right range/ not overlapping
-  if (options.levels !== undefined && (options.levels <= 0 || !Number.isInteger(options.levels)))
-    throw new RangeError('levels must be a non-negative non-zero integer')
-  if (options.levels !== undefined && options.recursive !== undefined)
-    throw new RangeError(
-      'please specify one of: levels | recursive. We cannot correctly interpret your wishes when both are specified',
-    )
+  if (
+    options.maxDepth !== undefined &&
+    (options.maxDepth <= 0 || !Number.isInteger(options.maxDepth))
+  )
+    throw new RangeError('maxDepth must be a non-negative non-zero integer')
+  if (options.maxDepth !== undefined && options.recursive !== true)
+    throw new RangeError('maxDepth only makes sense if recursive is set to true')
 }
 
 const listSubdirectories = async (options, currentLevel = 0) => {
@@ -59,8 +60,9 @@ const listSubdirectories = async (options, currentLevel = 0) => {
     .filter(isDirectory)
 
   if (
-    (options.levels !== undefined && currentLevel < options.levels - 1) ||
-    options.recursive === true
+    options.recursive &&
+    ((options.maxDepth !== undefined && currentLevel < options.maxDepth - 1) ||
+      options.maxDepth === undefined)
   ) {
     return filteredLevelContentFullPaths.concat(
       flatten(

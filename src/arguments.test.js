@@ -80,16 +80,37 @@ describe('arguments', () => {
     )
   })
 
-  test('if levels option is not a number, a TypeError is thrown', async () => {
+  test('if maxDepth option is specified but recursive option is not specified, a RangeError is thrown', async () => {
     expect.assertions(1)
-    await expect(listSubdirectories({ path: '.', levels: 'fdas' })).rejects.toThrow(TypeError)
+    await expect(listSubdirectories({ path: '.', maxDepth: 3 })).rejects.toThrow(RangeError)
   })
 
-  test('if levels option is not a number, the message explains which argument is incorrect', async () => {
+  test('if maxDepth option is specified but recursive option is not specified, the message explains why this is invalid', async () => {
     expect.assertions(1)
-    await expect(listSubdirectories({ path: '.', levels: 'fdas' })).rejects.toThrow(
-      'levels must be a number',
+    await expect(listSubdirectories({ path: '.', maxDepth: 3 })).rejects.toThrow(
+      'maxDepth only makes sense if recursive is set to true',
     )
+  })
+
+  test('if maxDepth option is specified but recursive option is set to false, the message explains why this is invalid', async () => {
+    expect.assertions(1)
+    await expect(listSubdirectories({ path: '.', maxDepth: 3, recursive: false })).rejects.toThrow(
+      'maxDepth only makes sense if recursive is set to true',
+    )
+  })
+
+  test('if maxDepth option is not a number, a TypeError is thrown', async () => {
+    expect.assertions(1)
+    await expect(
+      listSubdirectories({ path: '.', maxDepth: 'fdas', recursive: true }),
+    ).rejects.toThrow(TypeError)
+  })
+
+  test('if maxDepth option is not a number, the message explains which argument is incorrect', async () => {
+    expect.assertions(1)
+    await expect(
+      listSubdirectories({ path: '.', maxDepth: 'fdas', recursive: true }),
+    ).rejects.toThrow('maxDepth must be a number')
   })
 
   test('if recursive option is not a boolean, a TypeError is thrown', async () => {
@@ -104,39 +125,31 @@ describe('arguments', () => {
     )
   })
 
-  test('if levels option is zero, a RangeError is thrown', async () => {
+  test('if maxDepth option is zero, a RangeError is thrown', async () => {
     expect.assertions(1)
-    await expect(listSubdirectories({ path: '.', levels: 0 })).rejects.toThrow(RangeError)
-  })
-
-  test('if levels option is zero, the message explains why the argument is out of range', async () => {
-    expect.assertions(1)
-    await expect(listSubdirectories({ path: '.', levels: 0 })).rejects.toThrow(
-      'levels must be a non-negative non-zero integer',
-    )
-  })
-
-  test('if levels option is negative, a RangeError is thrown', async () => {
-    expect.assertions(1)
-    await expect(listSubdirectories({ path: '.', levels: -5 })).rejects.toThrow(RangeError)
-  })
-
-  test('if levels option is a floating point, a RangeError is thrown', async () => {
-    expect.assertions(1)
-    await expect(listSubdirectories({ path: '.', levels: 3.14 })).rejects.toThrow(RangeError)
-  })
-
-  test('if levels option and recursive option are specified, a RangeError is thrown', async () => {
-    expect.assertions(1)
-    await expect(listSubdirectories({ path: '.', levels: 3, recursive: true })).rejects.toThrow(
+    await expect(listSubdirectories({ path: '.', maxDepth: 0, recursive: true })).rejects.toThrow(
       RangeError,
     )
   })
 
-  test('if levels option and recursive option are specified, the message explains why this is invalid', async () => {
+  test('if maxDepth option is zero, the message explains why the argument is out of range', async () => {
     expect.assertions(1)
-    await expect(listSubdirectories({ path: '.', levels: 3, recursive: true })).rejects.toThrow(
-      'please specify one of: levels | recursive. We cannot correctly interpret your wishes when both are specified',
+    await expect(listSubdirectories({ path: '.', maxDepth: 0, recursive: true })).rejects.toThrow(
+      'maxDepth must be a non-negative non-zero integer',
     )
+  })
+
+  test('if maxDepth option is negative, a RangeError is thrown', async () => {
+    expect.assertions(1)
+    await expect(listSubdirectories({ path: '.', maxDepth: -5, recursive: true })).rejects.toThrow(
+      RangeError,
+    )
+  })
+
+  test('if maxDepth option is a floating point, a RangeError is thrown', async () => {
+    expect.assertions(1)
+    await expect(
+      listSubdirectories({ path: '.', maxDepth: 3.14, recursive: true }),
+    ).rejects.toThrow(RangeError)
   })
 })
