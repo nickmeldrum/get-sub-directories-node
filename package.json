@@ -1,6 +1,6 @@
 {
   "name": "list-subdirectories",
-  "version": "0.0.1",
+  "version": "1.0.0",
   "description": "returns an array of subdirectory path strings",
   "keywords": [
     "filesystem"
