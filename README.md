@@ -4,7 +4,7 @@ A simple function that allows you to pass in a path to a directory and it will r
 
 ## Installation
 
-`yarn install list-subdirectories`
+`yarn add list-subdirectories`
 
 or
 
