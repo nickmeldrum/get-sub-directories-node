@@ -20,33 +20,64 @@ const listSubdirectories = require('list-subdirectories')
 listSubdirectories('.').then(list => console.log(list))
 ```
 
+Notice that it doesn't support callbacks and is promisified by default.
+
 ## API
 
 ### listSubdirectories method
 
 This is the only method available in the library. It is the default export (there are no named exports.)
 
-It accepts 2 parameters:
+It expects 1 required parameter. That parameter can be a string or an object.
 
-#### path: string (required)
+If that parameter is a string:
 
-A string value of an absolute path to search for subdirectories within.
+#### path: string
 
-#### options: object (optional)
-
-If not provided, the key values will default to:
+It uses the parameter as the absolute path to scan for subdirectories within.
+It assumes the defaults for the other options:
 
 ```
     {
         filter: undefined,
-        levels: 1,
         recursive: false,
+        maxDepth: 1,
     }
 ```
 
-I.e. it will search for all subdirectories (unfiltered) at the 1st level only (no subdirectories of subdirectories.)
+I.e. it will scan for all subdirectories (unfiltered) at the 1st level only (no subdirectories of subdirectories.)
 
-Details on the possible key values:
+If the 1st parameter is an object:
+
+#### options: object
+
+The options object definition looks like this:
+
+```
+    {
+        path: string, // path is required and must be a string
+        filter?: string, // filter is an optional string value
+        recursive?: boolean, // recursive is an optional boolean value
+        maxDepth?: number, // maxDepth is an optional number and can only be present if recursive is set to true
+    }
+```
+
+If the optional values are not provided, they will default to:
+
+```
+    {
+        filter: undefined, // no filter set, so it will return all subdirectories
+        recursive: false, // don't scan recursively so it will only return immediate subdirectories
+        maxDepth: undefined, // no max depth defined as we aren't scanning recursively
+    }
+```
+
+More details on the possible options:
+
+##### path: string (required)
+
+ * the absolute path to the directory to scan for subdirectories.
+ * this parameter is required and must reference an existing directory or the method will throw an error.
 
 ##### filter: string (optional)
 
@@ -54,19 +85,17 @@ Details on the possible key values:
  * If not included, then the method will return ALL subdirectories.
  * If included, then the method will return only matched subdirectories.
 
-##### levels: number (optional)
-
- * An optional number to specify how many levels deep the method should search.
- * Can be any integer greater than zero.
- * If not included, then the method will assume a level of 1 (unless `recursive` is specified.)
- * Only specify EITHER `levels` or `recursive` NOT both.
- * If you don't want a cap on levels (i.e. "as deep as you can go"), use the `recursive` key instead.
-
 ##### recursive: boolean (optional)
 
- * An optional boolean that, if set to true, specifies to search recursively through all subdirectories.
- * If not included or set to false, the method will assume a level of 1 or use the `levels` key if specified.
- * Only specify EITHER `levels` or `recursive` NOT both.
+ * An optional boolean that, if set to true, specifies to scan recursively through all subdirectories.
+ * If not included or set to false, the method will only scan the immediate subdirectories.
+
+##### maxDepth: number (optional)
+
+ * An optional number to specify the max depth the method should scan if scanning recursively.
+ * Can be any integer greater than zero.
+ * If recursive is true and maxDepth is not specified, the method will continue scanning to a theoretical infinite depth.
+ * You can only specify maxDepth is recursive is set to true. An error will occur if recursive is not set to true and maxDepth is set.
 
 ## Errors
 
@@ -92,10 +121,10 @@ If arguments supplied are of the wrong type, then a `TypeError` is thrown:
     }
 ```
 
-If both `levels` and `recursive` are specified in the options, then a `RangeError` is thrown:
+If both `maxDepth` is set and `recursive` is not set to true, then a `RangeError` is thrown:
 
 ```
-    { Error: RangeError: please specify one of: levels | recursive. We cannot correctly interpret your wishes when both are specified,
+    { Error: RangeError: You can only set maxDepth if recursive is set to true,
       stack: ...
     }
 ```
@@ -126,7 +155,7 @@ This will return a list of subdirectories (non-recursive) of the current directo
 listSubdirectories('.', { filter: '^foo.*' }).then(list => console.log(list))
 ```
 
-### Searching recursively:
+### Scanning recursively:
 
 This will return a list of all subdirectories recursively (no depth limit):
 
@@ -134,12 +163,12 @@ This will return a list of all subdirectories recursively (no depth limit):
 listSubdirectories('.', { recursive: true }).then(list => console.log(list))
 ```
 
-### Using levels:
+### Using maxDepth:
 
 This will return a list of all subdirectories recursively to a limit of 2 (i.e. subdirectories and THEIR subdirectories, but no deeper):
 
 ```
-listSubdirectories('.', { levels: 2 }).then(list => console.log(list))
+listSubdirectories('.', { recursive: true, maxDepth: 2 }).then(list => console.log(list))
 ```
 
 ### Invalid options:
@@ -147,8 +176,8 @@ listSubdirectories('.', { levels: 2 }).then(list => console.log(list))
 All of the following will throw a `RangeError`:
 
 ```
-listSubdirectories('.', { levels: 2, recursive: true }).then(list => console.log(list))
-listSubdirectories('.', { levels: -1.5 }).then(list => console.log(list))
+listSubdirectories('.', { maxDepth: 2, recursive: false }).then(list => console.log(list))
+listSubdirectories('.', { maxDepth: -1.5 }).then(list => console.log(list))
 ```
 
 All of the following will throw a `TypeError`:
@@ -157,7 +186,7 @@ All of the following will throw a `TypeError`:
 listSubdirectories(0).then(list => console.log(list))
 listSubdirectories('.', '').then(list => console.log(list))
 listSubdirectories('.', { filter: true }).then(list => console.log(list))
-listSubdirectories('.', { levels: 'something' }).then(list => console.log(list))
+listSubdirectories('.', { maxDepth: 'something' }).then(list => console.log(list))
 listSubdirectories('.', { recursive: 'do it please' }).then(list => console.log(list))
 ```
 
